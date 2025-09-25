@@ -107,6 +107,14 @@
   .hero-logo { height: 120px; width: 120px; transition: height 0.3s, width 0.3s; margin-bottom: 1.25rem; }
   @media (max-width: 1024px){ .hero-logo { height: 90px; width: 90px; } }
   @media (max-width: 768px){ .hero-logo { height: 60px; width: 60px; } }
+  .hero-overlay {
+  background: linear-gradient(
+    to right,
+    rgba(49, 46, 129, 0.7),   /* indigo-900/70 */
+    rgba(30, 58, 138, 0.7),   /* blue-900/70 */
+    rgba(157, 23, 77, 0.7)    /* pink-800/70 */
+  );
+}
 </style>
 </head>
 <body>
@@ -146,7 +154,7 @@
 <section id="home" class="relative h-screen flex items-center justify-center text-center text-white fade-in">
   <div class="absolute inset-0">
     <img src="school.jpeg" alt="Vedic Techno School Building" class="w-full h-full object-cover">
-    <div class="absolute inset-0 bg-gradient-to-r from-yellow-900/70 via-blue-900/70 to-pink-800/70"></div>
+    <div class="absolute inset-0 hero-overlay"></div>
   </div>
   <div class="relative z-10 max-w-3xl px-4">
     <img src="logo.jpeg" alt="Vedic Techno School Logo" class="hero-logo mx-auto rounded-full fade-in">
