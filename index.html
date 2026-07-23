@@ -1,0 +1,1627 @@
+<!DOCTYPE html>
+<html lang="en" style="scroll-behavior: smooth;">
+<head>
+    <meta charset="UTF-8">
+    <meta name="google-site-verification" content="3mtDmQDuazValopAmPdDEIOGdap7_BOccQoOjEMWt3o" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Admissions open at Vedic Techno School – the best CBSE English Medium School in Pipili, Puri. Smart classrooms, AC hostel, and holistic education from Nursery to Class 10. Enquire now!">
+    <meta name="author" content="Vedic Techno School">
+    <meta name="robots" content="index,follow">
+    <meta name="theme-color" content="#2563EB">
+    <title>Vedic Techno School | CBSE English Medium School | Pipili, Puri</title>
+    <link rel="canonical" href="https://vedictechnoschool.github.io/">
+    <link rel="icon" type="image/jpeg" href="logo.jpeg">
+    <link rel="apple-touch-icon" href="logo.jpeg">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Vedic Techno School">
+    <meta property="og:description" content="CBSE English Medium School in Pipili, Puri, Odisha.">
+    <meta property="og:url" content="https://vedictechnoschool.github.io/">
+    <meta property="og:image" content="https://vedictechnoschool.github.io/logo.jpeg">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Vedic Techno School">
+    <meta name="twitter:description" content="CBSE English Medium School in Pipili, Puri, Odisha.">
+    <meta name="twitter:image" content="https://vedictechnoschool.github.io/logo.jpeg">
+    <script type="application/ld+json">
+    {
+      "@context":"https://schema.org",
+      "@type":"School",
+      "name":"Vedic Techno School",
+      "url":"https://vedictechnoschool.github.io/",
+      "logo":"https://vedictechnoschool.github.io/logo.jpeg",
+      "email":"vedictechnoschool@gmail.com",
+      "telephone":"+91-9861180727",
+      "address":{
+        "@type":"PostalAddress",
+        "addressLocality":"Pipili",
+        "addressRegion":"Odisha",
+        "postalCode":"752104",
+        "addressCountry":"IN"
+      }
+    }
+    </script>
+    <script type="application/ld+json" id="aggregateRatingSchema"></script>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&family=Merriweather:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+  import { getFirestore, collection, addDoc, query, orderBy, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
+  const firebaseConfig = {
+    apiKey: "AIzaSyA6vW0z4NycpyJRmbbr6Ceh9aodhO8PJxE",
+    authDomain: "vedic-techno-school-fd82d.firebaseapp.com",
+    projectId: "vedic-techno-school-fd82d",
+    storageBucket: "vedic-techno-school-fd82d.firebasestorage.app",
+    messagingSenderId: "310210160116",
+    appId: "1:310210160116:web:5ce5ae511a45e2556d45a1",
+    measurementId: "G-J9ZN4QED26"
+  };
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+  window.addEventListener('DOMContentLoaded', () => {
+    const reviewForm = document.getElementById('reviewForm');
+    const q = query(collection(db, "reviews"), orderBy("createdAt", "desc"));
+    onSnapshot(q, (snapshot) => {
+      const allReviews = [];
+      snapshot.forEach((doc) => {
+        allReviews.push(doc.data());
+      });
+      window.renderReviews(allReviews);
+      updateAggregateRating(allReviews);
+    });
+    reviewForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const name = document.getElementById('reviewerName').value.trim();
+      const rating = parseInt(document.getElementById('reviewRating').value);
+      const review = document.getElementById('reviewText').value.trim();
+      if (!name || !rating || !review) return alert('Please fill all fields.');
+      await addDoc(collection(db, "reviews"), {
+        name, rating, review, createdAt: serverTimestamp()
+      });
+      reviewForm.reset();
+      // Update character counter back to 0
+      document.getElementById('charCount').textContent = '0 / 300 characters';
+      const successMsg = document.getElementById('reviewSuccessMsg');
+      if (successMsg) {
+        successMsg.classList.remove('hidden');
+        setTimeout(() => { successMsg.classList.add('hidden'); }, 4000);
+      }
+    });
+    const faders = document.querySelectorAll('.fade-in');
+    const appearOptions = { threshold: 0.2, rootMargin: "0px 0px -50px 0px" };
+    const appearOnScroll = new IntersectionObserver((entries, observer)=>{
+      entries.forEach(entry=>{
+        if(entry.isIntersecting){
+          entry.target.style.animation = "fadeInElement 1s ease forwards";
+          observer.unobserve(entry.target);
+        }
+      });
+    }, appearOptions);
+    faders.forEach(fader => appearOnScroll.observe(fader));
+  });
+  function updateAggregateRating(reviews) {
+    if (!reviews.length) return;
+    const total = reviews.length;
+    const sum = reviews.reduce((acc, r) => acc + (r.rating || 0), 0);
+    const average = (sum / total).toFixed(1);
+    const schema = {
+      "@context": "https://schema.org",
+      "@type": "School",
+      "name": "Vedic Techno School",
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": average,
+        "bestRating": "5",
+        "worstRating": "1",
+        "ratingCount": total
+      }
+    };
+    document.getElementById('aggregateRatingSchema').textContent = JSON.stringify(schema);
+  }
+</script>
+<style>
+  /* ============ RESET & GLOBAL ============ */
+  body {
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    padding: 0;
+    opacity: 0;
+    animation: pageFadeIn 0.8s ease forwards;
+    background: #f8fafc;
+    color: #1e293b;
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  @keyframes pageFadeIn {
+    to { opacity: 1; }
+  }
+
+  .fade-in {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+
+  @keyframes fadeInElement {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  ::selection {
+    background: #2563eb;
+    color: #fff;
+  }
+
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #f1f5f9;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #93c5fd;
+    border-radius: 10px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #2563eb;
+  }
+
+  /* ============ STICKY ADMISSION BANNER ============ */
+  #admissionBanner {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background: linear-gradient(90deg, #f59e0b, #f97316);
+    color: #1e1b4b;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 16px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  #admissionBanner.hidden {
+    transform: translateY(-100%);
+  }
+  #admissionBanner .banner-text {
+    font-size: 0.9rem;
+  }
+  #admissionBanner .banner-btn {
+    background: #1e1b4b;
+    color: #fff;
+    padding: 5px 14px;
+    border-radius: 20px;
+    font-weight: 700;
+    text-decoration: none;
+    transition: background 0.3s;
+    font-size: 0.85rem;
+  }
+  #admissionBanner .close-banner {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    font-size: 1.4rem;
+    line-height: 1;
+    background: none;
+    border: none;
+    color: inherit;
+    font-weight: 700;
+    padding: 0 4px;
+  }
+  @media (max-width: 768px) {
+    #admissionBanner {
+      padding: 6px 12px;
+      font-size: 0.8rem;
+    }
+    #admissionBanner .banner-text {
+      font-size: 0.8rem;
+    }
+    #admissionBanner .banner-btn {
+      padding: 4px 12px;
+      font-size: 0.75rem;
+    }
+  }
+
+  /* ============ NAVBAR ============ */
+  #navbar {
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    backdrop-filter: blur(0px);
+    -webkit-backdrop-filter: blur(0px);
+  }
+
+  .scrolled {
+    background-color: rgba(255, 255, 255, 0.95) !important;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08) !important;
+    backdrop-filter: blur(20px) !important;
+    -webkit-backdrop-filter: blur(20px) !important;
+  }
+
+  .scrolled .nav-link,
+  .scrolled .school-name {
+    color: #1e1b4b !important;
+  }
+
+  .scrolled #menuBtn .bar {
+    background-color: #1e1b4b !important;
+  }
+
+  .nav-link {
+    position: relative;
+    transition: all 0.3s ease;
+    padding: 6px 0;
+    text-decoration: none;
+  }
+
+  .nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 50%;
+    transform: translateX(-50%) scaleX(0);
+    width: 70%;
+    height: 2px;
+    border-radius: 2px;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  @media (hover: hover) {
+    .nav-link:hover::after {
+      transform: translateX(-50%) scaleX(1);
+    }
+  }
+
+  .nav-link.active {
+    color: #fbbf24 !important;
+    font-weight: 700;
+  }
+  .nav-link.active::after {
+    transform: translateX(-50%) scaleX(1);
+  }
+
+  .nav-link[href="#home"]::after { background: #ec4899; }
+  .nav-link[href="#news"]::after { background: #10b981; }
+  .nav-link[href="#about"]::after { background: #8b5cf6; }
+  .nav-link[href="#facilities"]::after { background: #3b82f6; }
+  .nav-link[href="#leadership"]::after { background: #ef4444; }
+  .nav-link[href="#gallery"]::after { background: #f59e0b; }
+  .nav-link[href="#reviews"]::after { background: #f97316; }
+  .nav-link[href="#contact"]::after { background: #06b6d4; }
+
+  #menuBtn.open .bar:nth-child(1) {
+    transform: rotate(45deg) translate(5px, 5px);
+  }
+  #menuBtn.open .bar:nth-child(2) {
+    opacity: 0;
+  }
+  #menuBtn.open .bar:nth-child(3) {
+    transform: rotate(-45deg) translate(5px, -5px);
+  }
+
+  #navLinksMobile {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    background: linear-gradient(180deg, #1e1b4b 0%, #312e81 100%);
+    border-radius: 0 0 16px 16px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  }
+
+  #navLinksMobile.open {
+    max-height: 600px;
+  }
+
+  #navLinksMobile a {
+    display: block;
+    padding: 14px 0;
+    text-align: center;
+    color: #e2e8f0;
+    font-weight: 600;
+    font-size: 1rem;
+    letter-spacing: 0.3px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.3s ease;
+  }
+
+  @media (hover: hover) {
+    #navLinksMobile a:hover {
+      background: rgba(255, 255, 255, 0.08);
+      color: #fff;
+      letter-spacing: 1px;
+    }
+  }
+
+  @media(min-width:768px) {
+    #navLinksMobile {
+      display: none !important;
+    }
+  }
+
+  /* ============ HERO ============ */
+  #home {
+    position: relative;
+  }
+
+  .hero-overlay {
+    background: linear-gradient(
+      135deg,
+      rgba(30, 27, 75, 0.78) 0%,
+      rgba(37, 99, 235, 0.65) 40%,
+      rgba(147, 51, 234, 0.55) 70%,
+      rgba(190, 24, 93, 0.5) 100%
+    );
+  }
+
+  .hero-logo {
+    height: 120px;
+    width: 120px;
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    margin-bottom: 1.25rem;
+    border-radius: 50%;
+    box-shadow: 0 8px 40px rgba(0, 0, 0, 0.3), 0 0 0 6px rgba(255, 255, 255, 0.15);
+    animation: logoFloat 3s ease-in-out infinite;
+  }
+
+  @keyframes logoFloat {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+  }
+
+  @media (max-width: 1024px) {
+    .hero-logo {
+      height: 90px;
+      width: 90px;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .hero-logo {
+      height: 65px;
+      width: 65px;
+      box-shadow: 0 6px 25px rgba(0, 0, 0, 0.3), 0 0 0 4px rgba(255, 255, 255, 0.15);
+    }
+  }
+
+  #home h1 {
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    letter-spacing: -0.5px;
+    line-height: 1.2;
+  }
+
+  #home p {
+    text-shadow: 0 1px 6px rgba(0, 0, 0, 0.25);
+    font-weight: 400;
+  }
+
+  #home .bg-yellow-400 {
+    transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 20px rgba(250, 204, 21, 0.4);
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  @media (hover: hover) {
+    #home .bg-yellow-400:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 30px rgba(250, 204, 21, 0.55);
+    }
+  }
+
+  /* Typing effect */
+  .typing-container {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: #fbbf24;
+    margin-bottom: 1.5rem;
+    height: 2rem;
+  }
+  .typing-text::after {
+    content: '|';
+    animation: blink 1s step-end infinite;
+    margin-left: 2px;
+    font-weight: 300;
+  }
+  @keyframes blink {
+    50% { opacity: 0; }
+  }
+
+  /* ============ SECTION HEADINGS ============ */
+  section h2 {
+    position: relative;
+    display: inline-block;
+    letter-spacing: -0.5px;
+  }
+
+  section h2::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 4px;
+    border-radius: 2px;
+  }
+
+  #news h2::after { background: linear-gradient(90deg, #10b981, #34d399); }
+  #about h2::after { background: linear-gradient(90deg, #8b5cf6, #ec4899); }
+  #facilities h2::after { background: linear-gradient(90deg, #3b82f6, #8b5cf6); }
+  #leadership h2::after { background: linear-gradient(90deg, #10b981, #3b82f6); }
+  #gallery h2::after { background: linear-gradient(90deg, #f59e0b, #ef4444); }
+  #reviews h2::after { background: linear-gradient(90deg, #f59e0b, #f97316); }
+  #contact h2::after { background: linear-gradient(90deg, #3b82f6, #06b6d4); }
+
+  /* ============ NEWS ============ */
+  #news {
+    background: linear-gradient(135deg, #f0f9ff, #e0f2fe);
+  }
+  .news-card {
+    transition: all 0.3s ease;
+  }
+  @media (hover: hover) {
+    .news-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    }
+  }
+
+  /* ============ ABOUT ============ */
+  #about {
+    background: linear-gradient(135deg, #faf5ff 0%, #fce7f3 30%, #ede9fe 60%, #e0e7ff 100%);
+    position: relative;
+    overflow: hidden;
+  }
+
+  #about::before {
+    content: '';
+    position: absolute;
+    top: -80px;
+    right: -80px;
+    width: 250px;
+    height: 250px;
+    background: rgba(139, 92, 246, 0.06);
+    border-radius: 50%;
+    pointer-events: none;
+  }
+
+  #about::after {
+    content: '';
+    position: absolute;
+    bottom: -60px;
+    left: -60px;
+    width: 200px;
+    height: 200px;
+    background: rgba(236, 72, 153, 0.05);
+    border-radius: 50%;
+    pointer-events: none;
+  }
+
+  #about p {
+    font-size: 1.1rem;
+    line-height: 1.9;
+    position: relative;
+    z-index: 1;
+  }
+
+  #about b {
+    color: #4338ca;
+    font-weight: 700;
+  }
+
+  /* ============ FACILITIES ============ */
+  #facilities {
+    background: linear-gradient(180deg, #ffffff 0%, #f8fafc 50%, #f1f5f9 100%);
+  }
+
+  #facilities .grid > div {
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 1px solid transparent;
+    position: relative;
+    overflow: hidden;
+  }
+
+  #facilities .grid > div::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    border-radius: 2px 2px 0 0;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  #facilities .grid > div:nth-child(1)::before { background: linear-gradient(90deg, #3b82f6, #6366f1); }
+  #facilities .grid > div:nth-child(2)::before { background: linear-gradient(90deg, #ec4899, #f43f5e); }
+  #facilities .grid > div:nth-child(3)::before { background: linear-gradient(90deg, #10b981, #14b8a6); }
+  #facilities .grid > div:nth-child(4)::before { background: linear-gradient(90deg, #f59e0b, #f97316); }
+
+  @media (hover: hover) {
+    #facilities .grid > div:hover::before {
+      opacity: 1;
+    }
+    #facilities .grid > div:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+      border-color: rgba(0, 0, 0, 0.05);
+    }
+  }
+
+  #facilities .grid > div h3 {
+    font-weight: 700;
+    letter-spacing: -0.3px;
+  }
+
+  /* ============ LEADERSHIP ============ */
+  #leadership {
+    background: linear-gradient(180deg, #eef2ff 0%, #faf5ff 50%, #fff1f2 100%);
+    position: relative;
+  }
+
+  #leadership .grid > div {
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 1px solid rgba(0, 0, 0, 0.04);
+    position: relative;
+    overflow: hidden;
+  }
+
+  @media (hover: hover) {
+    #leadership .grid > div:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.1);
+    }
+    #leadership .grid > div:hover img {
+      transform: scale(1.05);
+      box-shadow: 0 12px 35px rgba(0, 0, 0, 0.18);
+    }
+  }
+
+  #leadership .grid > div img {
+    transition: all 0.4s ease;
+    border: 4px solid #fff;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+  }
+
+  /* ============ GALLERY ============ */
+  #gallery {
+    background: linear-gradient(180deg, #f0f9ff 0%, #e0f2fe 50%, #f0f9ff 100%);
+  }
+
+  .gallery-container {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16/9;
+    overflow: hidden;
+    border-radius: 20px;
+    box-shadow: 0 15px 50px rgba(0, 0, 0, 0.15);
+    border: 3px solid #fff;
+  }
+
+  .gallery-slide {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    transition: opacity 0.8s ease-in-out;
+    border-radius: 17px;
+    overflow: hidden;
+  }
+
+  .gallery-slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 17px;
+  }
+
+  .gallery-slide.active {
+    opacity: 1;
+    position: relative;
+  }
+
+  .prev,
+  .next {
+    cursor: pointer;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: bold;
+    font-size: 18px;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.45);
+    user-select: none;
+    z-index: 10;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+  }
+
+  .next { right: 14px; }
+  .prev { left: 14px; }
+
+  @media (hover: hover) {
+    .prev:hover,
+    .next:hover {
+      background: rgba(37, 99, 235, 0.8);
+      transform: translateY(-50%) scale(1.1);
+      box-shadow: 0 4px 15px rgba(37, 99, 235, 0.4);
+    }
+  }
+
+  .dots-container {
+    text-align: center;
+    margin-top: 16px;
+  }
+
+  .dots-container .dot {
+    cursor: pointer;
+    height: 12px;
+    width: 12px;
+    margin: 0 5px;
+    background-color: #cbd5e1;
+    border-radius: 50%;
+    display: inline-block;
+    transition: all 0.4s ease;
+  }
+
+  .dots-container .dot.active {
+    background-color: #2563eb;
+    width: 30px;
+    border-radius: 6px;
+  }
+
+  /* ============ REVIEWS ============ */
+  #reviews {
+    background: linear-gradient(180deg, #fffbeb 0%, #fef3c7 30%, #fff7ed 70%, #fff1f2 100%);
+  }
+
+  #reviews .bg-white {
+    border: 1px solid rgba(0, 0, 0, 0.04);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
+    transition: all 0.3s ease;
+  }
+
+  #reviews input,
+  #reviews select,
+  #reviews textarea {
+    border: 2px solid #e2e8f0;
+    transition: all 0.3s ease;
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.95rem;
+  }
+
+  #reviews input:focus,
+  #reviews select:focus,
+  #reviews textarea:focus {
+    outline: none;
+    border-color: #6366f1;
+    box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+  }
+
+  #reviews button[type="submit"] {
+    background: linear-gradient(135deg, #4f46e5, #6366f1);
+    transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 15px rgba(79, 70, 229, 0.35);
+    font-weight: 600;
+    letter-spacing: 0.3px;
+  }
+
+  @media (hover: hover) {
+    #reviews button[type="submit"]:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 25px rgba(79, 70, 229, 0.5);
+      background: linear-gradient(135deg, #4338ca, #4f46e5);
+    }
+  }
+
+  #reviewText {
+    min-height: 120px;
+    max-height: 200px;
+    resize: vertical;
+  }
+
+  #reviewsList {
+    min-height: 240px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .review-slide {
+    display: none;
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+    min-height: 180px;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  }
+
+  .review-slide.active {
+    display: block;
+    opacity: 1;
+  }
+
+  .review-slide .stars {
+    font-size: 1.5rem;
+    letter-spacing: 2px;
+    line-height: 1;
+  }
+
+  .review-prev,
+  .review-next {
+    cursor: pointer;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    padding: 10px 14px;
+    color: #374151;
+    font-weight: bold;
+    font-size: 18px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.85);
+    user-select: none;
+    z-index: 10;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+  }
+
+  .review-prev { left: -8px; }
+  .review-next { right: -8px; }
+
+  @media (hover: hover) {
+    .review-prev:hover,
+    .review-next:hover {
+      background: #fff;
+      box-shadow: 0 4px 18px rgba(0, 0, 0, 0.15);
+      transform: translateY(-50%) scale(1.08);
+    }
+  }
+
+  .review-dots .dot {
+    cursor: pointer;
+    height: 10px;
+    width: 10px;
+    margin: 0 4px;
+    background-color: #cbd5e1;
+    border-radius: 50%;
+    display: inline-block;
+    transition: all 0.4s ease;
+  }
+
+  .review-dots .dot.active {
+    background-color: #6366f1;
+    width: 26px;
+    border-radius: 5px;
+  }
+
+  .review-success-msg {
+    transition: opacity 0.3s ease;
+  }
+
+  /* Character counter */
+  #charCount {
+    font-size: 0.85rem;
+    color: #6b7280;
+  }
+
+  /* ============ CONTACT ============ */
+  #contact {
+    background: linear-gradient(180deg, #eff6ff 0%, #e0e7ff 40%, #c7d2fe 100%);
+  }
+
+  #contact .bg-white {
+    border: 1px solid rgba(0, 0, 0, 0.04);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+  }
+
+  #contact input,
+  #contact select,
+  #contact textarea {
+    border: 2px solid #e2e8f0;
+    transition: all 0.3s ease;
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.95rem;
+    background: #f8fafc;
+  }
+
+  #contact input:focus,
+  #contact select:focus,
+  #contact textarea:focus {
+    outline: none;
+    border-color: #6366f1;
+    box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.08);
+    background: #fff;
+  }
+
+  #contact button[type="submit"] {
+    background: linear-gradient(135deg, #4f46e5, #6366f1);
+    transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 15px rgba(79, 70, 229, 0.35);
+    font-weight: 600;
+    letter-spacing: 0.3px;
+  }
+
+  @media (hover: hover) {
+    #contact button[type="submit"]:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 25px rgba(79, 70, 229, 0.5);
+      background: linear-gradient(135deg, #4338ca, #4f46e5);
+    }
+  }
+
+  .social-links {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+  }
+
+  .social-links a {
+    transition: all 0.3s ease;
+    padding: 8px 16px;
+    border-radius: 30px;
+    background: rgba(255, 255, 255, 0.7);
+    border: 1px solid rgba(0, 0, 0, 0.06);
+  }
+
+  @media (hover: hover) {
+    .social-links a:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+      background: #fff;
+    }
+  }
+
+  /* ============ THANK YOU ============ */
+  #thankyou {
+    display: none;
+    background: linear-gradient(135deg, #ecfdf5, #d1fae5);
+    padding: 3rem 1rem;
+    text-align: center;
+  }
+  #thankyou.visible {
+    display: block;
+  }
+
+  /* ============ FOOTER ============ */
+  footer {
+    background: linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #1e3a5f 100%);
+    font-weight: 400;
+    letter-spacing: 0.3px;
+  }
+
+  /* ============ FLOATING BUTTONS ============ */
+  .floating-btn {
+    position: fixed;
+    bottom: 24px;
+    left: 24px;
+    z-index: 1000;
+  }
+
+  .floating-btn img {
+    width: 55px;
+    height: 55px;
+    border-radius: 50%;
+    box-shadow: 0 6px 20px rgba(37, 211, 102, 0.4);
+    transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: pointer;
+  }
+
+  @media (hover: hover) {
+    .floating-btn img:hover {
+      transform: scale(1.15) rotate(-5deg);
+      box-shadow: 0 10px 30px rgba(37, 211, 102, 0.55);
+    }
+  }
+
+  .back-to-top {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    width: 50px;
+    height: 50px;
+    background: linear-gradient(135deg, #2563eb, #3b82f6);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    cursor: pointer;
+    box-shadow: 0 6px 20px rgba(37, 99, 235, 0.4);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease;
+  }
+
+  .back-to-top.show {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .back-to-top img {
+    width: 20px;
+    height: 20px;
+    filter: invert(1);
+  }
+
+  @media (hover: hover) {
+    .back-to-top:hover {
+      transform: scale(1.15);
+      box-shadow: 0 10px 30px rgba(37, 99, 235, 0.55);
+      background: linear-gradient(135deg, #1d4ed8, #2563eb);
+    }
+  }
+
+  /* ============ RESPONSIVE REFINEMENTS ============ */
+  @media (max-width: 768px) {
+    section {
+      padding-top: 48px !important;
+      padding-bottom: 48px !important;
+    }
+    section h2 {
+      font-size: 1.75rem !important;
+    }
+    #home h1 {
+      font-size: 1.5rem !important;
+    }
+    #home p {
+      font-size: 0.85rem !important;
+    }
+    .floating-btn img {
+      width: 45px;
+      height: 45px;
+    }
+    .back-to-top {
+      width: 42px;
+      height: 42px;
+    }
+    .social-links {
+      gap: 0.8rem;
+    }
+    .social-links a {
+      padding: 6px 10px;
+      font-size: 0.8rem;
+    }
+    .gallery-container {
+      aspect-ratio: 4/3;
+      border-radius: 14px;
+    }
+    .prev,
+    .next {
+      width: 34px;
+      height: 34px;
+      font-size: 14px;
+    }
+    #reviewText {
+      min-height: 100px;
+      max-height: 160px;
+    }
+  }
+</style>
+</head>
+<body>
+<!-- Sticky Admission Banner -->
+<div id="admissionBanner">
+  <span class="banner-text">🎓 Admissions Open for 2026-27 – Limited Seats!</span>
+  <a href="#contact" class="banner-btn">Enquire Now</a>
+  <button class="close-banner" onclick="closeBanner()">×</button>
+</div>
+
+<nav id="navbar" class="fixed w-full bg-transparent z-50 transition duration-300">
+  <div class="max-w-7xl mx-auto px-4 flex justify-between items-center h-16 relative">
+    <a href="#home" class="flex items-center space-x-3">
+      <img src="logo.jpeg" alt="School Logo" class="h-10 w-10 rounded-full">
+      <span class="school-name font-bold text-lg text-white">Vedic Techno School</span>
+    </a>
+    <div id="navLinksDesktop" class="hidden md:flex space-x-4">
+      <a href="#home" class="nav-link text-white font-semibold">Home</a>
+      <a href="#news" class="nav-link text-white font-semibold">News</a>
+      <a href="#about" class="nav-link text-white font-semibold">About</a>
+      <a href="#facilities" class="nav-link text-white font-semibold">Facilities</a>
+      <a href="#leadership" class="nav-link text-white font-semibold">From the Director & Principal</a>
+      <a href="#gallery" class="nav-link text-white font-semibold">Gallery</a>
+      <a href="#reviews" class="nav-link text-white font-semibold">Reviews</a>
+      <a href="#contact" class="nav-link text-white font-semibold">Contact Us</a>
+    </div>
+    <div class="md:hidden z-50">
+      <button id="menuBtn" class="text-white focus:outline-none relative flex flex-col justify-between items-center" style="width:24px; height:24px;">
+        <span class="bar block w-full h-1 bg-white rounded transition-all duration-300"></span>
+        <span class="bar block w-full h-1 bg-white rounded transition-all duration-300"></span>
+        <span class="bar block w-full h-1 bg-white rounded transition-all duration-300"></span>
+      </button>
+    </div>
+  </div>
+  <div id="navLinksMobile" class="flex-col md:hidden bg-indigo-900 w-full text-center">
+    <a href="#home">Home</a>
+    <a href="#news">News</a>
+    <a href="#about">About</a>
+    <a href="#facilities">Facilities</a>
+    <a href="#leadership">From the Director & Principal</a>
+    <a href="#gallery">Gallery</a>
+    <a href="#reviews">Reviews</a>
+    <a href="#contact">Contact Us</a>
+  </div>
+</nav>
+
+<!-- Hero Section -->
+<section id="home" class="relative h-screen flex items-center justify-center text-center text-white fade-in">
+  <div class="absolute inset-0">
+    <img src="school.jpeg" alt="Vedic Techno School Building" class="w-full h-full object-cover">
+    <div class="absolute inset-0 hero-overlay"></div>
+  </div>
+  <div class="relative z-10 max-w-3xl px-4">
+    <img src="logo.jpeg" alt="Vedic Techno School Logo" class="hero-logo mx-auto rounded-full fade-in">
+    <h1 class="text-3xl md:text-4xl sm:text-3xl font-extrabold mb-4 text-yellow-300 fade-in">Welcome to Vedic Techno School</h1>
+    <!-- Typing effect -->
+    <div class="typing-container mb-4">
+      <span class="typing-text" id="typingText"></span>
+    </div>
+    <p class="text-lg mb-6 text-gray-200 fade-in">Play Group ➝ Nursery ➝ Class 10 (CBSE Pattern) | Smart Learning | Dance | Music | Yoga | Taekwondo | Hostel Cum Day Boarding</p>
+    <a href="#about" class="bg-yellow-400 text-blue-900 px-6 py-3 rounded-full font-semibold hover:bg-yellow-300 transition fade-in">Learn More</a>
+  </div>
+</section>
+
+<!-- News / Announcements Section -->
+<section id="news" class="py-16 text-center fade-in">
+  <div class="max-w-7xl mx-auto px-4">
+    <h2 class="text-4xl font-bold mb-10 text-indigo-900">News & Announcements</h2>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div class="news-card bg-white p-6 rounded-2xl shadow-md border border-gray-100">
+        <span class="text-sm text-pink-600 font-semibold">June 10, 2026</span>
+        <h3 class="text-xl font-bold mt-2 mb-2 text-gray-800">Annual Sports Day 2026</h3>
+        <p class="text-gray-600">A grand celebration of athletic talent with inter‑house competitions and prizes.</p>
+      </div>
+      <div class="news-card bg-white p-6 rounded-2xl shadow-md border border-gray-100">
+        <span class="text-sm text-blue-600 font-semibold">May 25, 2026</span>
+        <h3 class="text-xl font-bold mt-2 mb-2 text-gray-800">Science Exhibition</h3>
+        <p class="text-gray-600">Students showcased innovative working models; winners awarded by the Director.</p>
+      </div>
+      <div class="news-card bg-white p-6 rounded-2xl shadow-md border border-gray-100">
+        <span class="text-sm text-green-600 font-semibold">April 15, 2026</span>
+        <h3 class="text-xl font-bold mt-2 mb-2 text-gray-800">Admissions Open 2026-27</h3>
+        <p class="text-gray-600">Limited seats available for Nursery to Class 10. Apply early to secure admission.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- About Section -->
+<section id="about" class="py-16 bg-gradient-to-r from-purple-100 to-pink-100 text-center fade-in">
+  <h2 class="text-4xl font-bold mb-6 text-indigo-900 fade-in">About Us</h2>
+  <p class="max-w-3xl mx-auto text-lg text-gray-700 fade-in">
+    Vedic Techno School is a premier institution providing education from <b>Pre-Nursery to Class 10</b>
+    under the CBSE pattern. With a focus on <b>holistic learning</b>, we combine modern technology
+    with traditional values, ensuring the all-round development of every student.
+  </p>
+</section>
+
+<!-- Facilities Section -->
+<section id="facilities" class="py-16 text-center bg-white fade-in">
+  <h2 class="text-4xl font-bold mb-6 text-indigo-900 fade-in">Our Facilities</h2>
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto px-4">
+    <div class="bg-gradient-to-br from-indigo-100 to-blue-50 p-6 rounded-2xl shadow-lg fade-in">
+      <h3 class="font-semibold text-xl mb-2 text-indigo-800">Smart Classrooms</h3>
+      <p class="text-gray-700">Digital learning with interactive smart boards and audio-visual support.</p>
+    </div>
+    <div class="bg-gradient-to-br from-pink-100 to-red-50 p-6 rounded-2xl shadow-lg fade-in">
+      <h3 class="font-semibold text-xl mb-2 text-pink-800">Hostel with AC Rooms</h3>
+      <p class="text-gray-700">Comfortable and modern hostel facilities with air-conditioned rooms.</p>
+    </div>
+    <div class="bg-gradient-to-br from-green-100 to-teal-50 p-6 rounded-2xl shadow-lg fade-in">
+      <h3 class="font-semibold text-xl mb-2 text-green-800">Sports & Activities</h3>
+      <p class="text-gray-700">Yoga, Taekwondo, Music, Dance, Art & Craft for overall student growth.</p>
+    </div>
+    <div class="bg-gradient-to-br from-yellow-100 to-orange-50 p-6 rounded-2xl shadow-lg fade-in md:col-span-3">
+      <h3 class="font-semibold text-xl mb-2 text-yellow-800">Practical Lab Based Learning</h3>
+      <p class="text-gray-700">Hands-on experiments in Science, Computer, and Mathematics labs to strengthen practical knowledge and innovation starting from Nursery to Class 10.</p>
+    </div>
+  </div>
+</section>
+
+<!-- Leadership Section -->
+<section id="leadership" class="py-16 bg-gradient-to-r from-indigo-100 to-purple-100 fade-in">
+  <div class="max-w-7xl mx-auto px-4">
+    <h2 class="text-4xl font-bold mb-12 text-center text-indigo-900 fade-in">From the Director & Principal</h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12">
+      <div class="bg-gradient-to-br from-blue-50 to-green-50 p-8 rounded-2xl shadow-lg text-center fade-in">
+        <img src="dir.jpeg" alt="Director of Vedic Techno School" class="w-32 h-32 rounded-full mx-auto mb-4 object-cover shadow-md border-4 border-white">
+        <h3 class="text-2xl font-bold text-green-900 mb-2">Director's Message</h3>
+        <h4 class="text-xl text-gray-700 font-semibold mb-4">Mr. Sudhir Shant Panda</h4>
+        <p class="text-gray-600 italic text-left whitespace-pre-line">
+Dear Sir/Madam,
+"The purpose of education is to educate the Students and also to inculcate humanitarian values, wisdom, compassion, courage and reliability in students. Vedic Techno School started its odyssey in 2010 and has come a long way. We aim to impact quality education which shall mould the young minds and transform students into good citizens of the country".
+
+Best wishes to the present and new students for their better future.
+
+With Regards
+Shri Sudhir Shant Panda
+        </p>
+      </div>
+      <div class="bg-gradient-to-br from-indigo-50 to-purple-50 p-8 rounded-2xl shadow-lg text-center fade-in">
+        <img src="pri.jpeg" alt="Principal of Vedic Techno School" class="w-32 h-32 rounded-full mx-auto mb-4 object-cover shadow-md border-4 border-white">
+        <h3 class="text-2xl font-bold text-indigo-900 mb-2">Principal's Desk</h3>
+        <h4 class="text-xl text-gray-700 font-semibold mb-4">Mrs. Subhashree Panda</h4>
+        <p class="text-gray-600 italic text-left whitespace-pre-line">
+Dear Sir/Madam,  
+The idea of sowing "Vedic Techno School" seed in the year 2010 have quickly grown into strong saplings. The school has marched forward to spread the light of education and pave the path of excellence for every student. It is heartening to see the achievements of the students and the school's progress throughout the year in various activities. Our dedicated teachers and staff reinforce the same values that the parents hold dear to help students reach their full potential. We are glad to continue new technology based, play way method & digital learning system through our Co-partners Kreedo, Cordova and Mittsure.  
+
+Best wishes to every student and their parents for their better future with the new technology.  
+
+With Regards  
+Smt. Subhashree Panda
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Gallery Section -->
+<section id="gallery" class="py-16 bg-gradient-to-r from-blue-50 to-indigo-50 text-center fade-in">
+  <h2 class="text-4xl font-bold mb-6 text-indigo-900 fade-in">Gallery</h2>
+  <div class="gallery-container relative max-w-4xl mx-auto rounded-xl overflow-hidden shadow-lg fade-in" id="galleryContainer">
+    <div class="gallery-slide active"><img src="img1.jpeg" loading="lazy" alt="School Image 1" class="w-full rounded-xl"></div>
+    <div class="gallery-slide"><img src="img2.jpeg" loading="lazy" alt="School Image 2" class="w-full rounded-xl"></div>
+    <div class="gallery-slide"><img src="img3.jpeg" loading="lazy" alt="School Image 3" class="w-full rounded-xl"></div>
+    <div class="gallery-slide"><img src="img4.jpeg" loading="lazy" alt="School Image 4" class="w-full rounded-xl"></div>
+    <div class="gallery-slide"><img src="img5.jpeg" loading="lazy" alt="School Image 5" class="w-full rounded-xl"></div>
+    <div class="gallery-slide"><img src="img6.jpeg" loading="lazy" alt="School Image 6" class="w-full rounded-xl"></div>
+    <div class="gallery-slide"><img src="img7.jpeg" loading="lazy" alt="School Image 7" class="w-full rounded-xl"></div>
+    <div class="gallery-slide"><img src="img8.jpeg" loading="lazy" alt="School Image 8" class="w-full rounded-xl"></div>
+    <div class="gallery-slide"><img src="img9.jpeg" loading="lazy" alt="School Image 9" class="w-full rounded-xl"></div>
+    <div class="gallery-slide"><img src="img10.jpeg" loading="lazy" alt="School Image 10" class="w-full rounded-xl"></div>
+    <div class="gallery-slide"><img src="img11.jpeg" loading="lazy" alt="School Image 11" class="w-full rounded-xl"></div>
+    <div class="gallery-slide"><img src="img12.jpeg" loading="lazy" alt="School Image 12" class="w-full rounded-xl"></div>
+    <div class="gallery-slide"><img src="img13.jpeg" loading="lazy" alt="School Image 13" class="w-full rounded-xl"></div>
+    <div class="gallery-slide"><img src="img14.jpeg" loading="lazy" alt="School Image 14" class="w-full rounded-xl"></div>
+    <div class="gallery-slide"><img src="img15.jpeg" loading="lazy" alt="School Image 15" class="w-full rounded-xl"></div>
+    <div class="gallery-slide"><img src="img16.jpeg" loading="lazy" alt="School Image 16" class="w-full rounded-xl"></div>
+    <div class="gallery-slide"><img src="img17.jpeg" loading="lazy" alt="School Image 17" class="w-full rounded-xl"></div>
+    <div class="gallery-slide"><img src="img18.jpeg" loading="lazy" alt="School Image 18" class="w-full rounded-xl"></div>
+    <div class="gallery-slide"><img src="img19.jpeg" loading="lazy" alt="School Image 19" class="w-full rounded-xl"></div>
+    <div class="gallery-slide"><img src="img20.jpeg" loading="lazy" alt="School Image 20" class="w-full rounded-xl"></div>
+    <div class="gallery-slide"><img src="img21.jpeg" loading="lazy" alt="School Image 21" class="w-full rounded-xl"></div>
+    <div class="gallery-slide"><img src="img22.jpeg" loading="lazy" alt="School Image 22" class="w-full rounded-xl"></div>
+    <div class="gallery-slide"><img src="img23.jpeg" loading="lazy" alt="School Image 23" class="w-full rounded-xl"></div>
+    <div class="gallery-slide"><img src="img24.jpeg" loading="lazy" alt="School Image 24" class="w-full rounded-xl"></div>
+    <div class="gallery-slide"><img src="img25.jpeg" loading="lazy" alt="School Image 25" class="w-full rounded-xl"></div>
+    <div class="gallery-slide"><img src="img26.jpeg" loading="lazy" alt="School Image 26" class="w-full rounded-xl"></div>
+    <div class="gallery-slide"><img src="img27.jpeg" loading="lazy" alt="School Image 27" class="w-full rounded-xl"></div>
+    <div class="gallery-slide"><img src="img28.jpeg" loading="lazy" alt="School Image 28" class="w-full rounded-xl"></div>
+    <div class="gallery-slide"><img src="img29.jpeg" loading="lazy" alt="School Image 29" class="w-full rounded-xl"></div>
+    <div class="gallery-slide"><img src="img30.jpeg" loading="lazy" alt="School Image 30" class="w-full rounded-xl"></div>
+    <a class="prev">❮</a>
+    <a class="next">❯</a>
+  </div>
+  <div class="dots-container">
+    <span class="dot active"></span>
+    <span class="dot"></span>
+    <span class="dot"></span>
+    <span class="dot"></span>
+    <span class="dot"></span>
+    <span class="dot"></span>
+    <span class="dot"></span>
+    <span class="dot"></span>
+    <span class="dot"></span>
+    <span class="dot"></span>
+  </div>
+</section>
+
+<!-- Reviews Section -->
+<section id="reviews" class="py-16 bg-gradient-to-r from-yellow-50 to-orange-50 text-center fade-in">
+  <h2 class="text-4xl font-bold mb-6 text-indigo-900">Reviews & Ratings</h2>
+  <div class="max-w-2xl mx-auto bg-white p-8 rounded-2xl shadow-lg mb-12">
+    <h3 class="text-2xl font-semibold mb-4 text-indigo-900">Leave a Review</h3>
+    <form id="reviewForm" class="space-y-4">
+      <input type="text" id="reviewerName" placeholder="Your Name" class="w-full border p-3 rounded-lg" required>
+      <select id="reviewRating" class="w-full border p-3 rounded-lg" required>
+        <option value="">Select Rating ⭐</option>
+        <option value="5">⭐⭐⭐⭐⭐ (Excellent)</option>
+        <option value="4">⭐⭐⭐⭐ (Very Good)</option>
+        <option value="3">⭐⭐⭐ (Good)</option>
+        <option value="2">⭐⭐ (Fair)</option>
+        <option value="1">⭐ (Poor)</option>
+      </select>
+      <textarea id="reviewText" placeholder="Your Review" class="w-full border p-3 rounded-lg" rows="4" required maxlength="300"></textarea>
+      <div id="charCount" class="text-right text-sm text-gray-500 mt-1">0 / 300 characters</div>
+      <button type="submit" class="bg-indigo-500 text-white px-6 py-3 rounded-full font-semibold hover:bg-indigo-400 transition">Submit Review</button>
+      <div id="reviewSuccessMsg" class="hidden bg-green-100 text-green-800 p-3 rounded-lg review-success-msg mt-3">✅ Thank you for your review! It will appear shortly.</div>
+    </form>
+  </div>
+  <div class="relative max-w-3xl mx-auto p-4 text-left" id="reviewsSliderContainer">
+    <div id="reviewsList" class="relative overflow-hidden"></div>
+    <a class="review-prev">❮</a>
+    <a class="review-next">❯</a>
+  </div>
+  <div class="review-dots text-center mt-4"></div>
+</section>
+
+<!-- Contact Section -->
+<section id="contact" class="py-16 bg-gradient-to-r from-blue-100 to-indigo-100 text-center fade-in">
+    <div class="max-w-2xl mx-auto bg-white p-8 rounded-2xl shadow-lg mb-12 fade-in">
+        <h3 class="text-2xl font-semibold mb-6 text-indigo-900">Enquiry Form</h3>
+        <form id="enquiryForm" action="https://formspree.io/f/movlolwa" method="POST" class="space-y-4" novalidate>
+            <input type="text" name="name" placeholder="Your Name" class="w-full border p-3 rounded-lg" required>
+            <input type="email" name="email" placeholder="Your Email" class="w-full border p-3 rounded-lg" required>
+            <input type="text" name="phone" placeholder="Your Phone" class="w-full border p-3 rounded-lg" required>
+            <div class="flex flex-col md:flex-row md:gap-4">
+                <select name="class" class="border p-2 rounded-lg md:flex-1" required>
+                    <option value="" disabled selected>Select Class</option>
+                    <option>Pre-Nursery (+2 Yrs.)</option>
+                    <option>Nursery (+3 Yrs.)</option>
+                    <option>LKG</option>
+                    <option>UKG</option>
+                    <option>Class 1</option>
+                    <option>Class 2</option>
+                    <option>Class 3</option>
+                    <option>Class 4</option>
+                    <option>Class 5</option>
+                    <option>Class 6</option>
+                    <option>Class 7</option>
+                    <option>Class 8</option>
+                    <option>Class 9</option>
+                    <option>Class 10</option>
+                </select>
+                <div class="border p-2 rounded-lg md:flex-1 flex items-center mt-4 md:mt-0">
+                    <span class="font-semibold mr-6">Hostel</span>
+                    <label class="flex items-center gap-2 cursor-pointer mr-4">
+                        <input type="radio" name="hostel" value="Yes" required>
+                        <span> Yes</span>
+                    </label>
+                    <label class="flex items-center gap-2 cursor-pointer">
+                        <input type="radio" name="hostel" value="No" required>
+                        <span> No</span>
+                    </label>
+                </div>
+            </div>
+            <textarea name="message" placeholder="Your Message" class="w-full border p-3 rounded-lg" rows="4" required></textarea>
+            <button type="submit" id="enquirySubmitBtn" class="bg-indigo-500 text-white px-6 py-3 rounded-full font-semibold hover:bg-indigo-400 transition">Submit</button>
+            <div id="enquiryStatus" class="mt-3 text-center" style="display:none;"></div>
+        </form>
+    </div>
+    <h2 class="text-4xl font-bold mb-6 text-indigo-900 fade-in">Contact Us</h2>
+    <p class="mb-2 fade-in">📍 Block Chhak, Pipili, Puri, Odisha – 752104</p>
+    <p class="mb-2 fade-in">📞 Phone: +91 9861180727</p>
+    <p class="mb-4 fade-in">✉️ Email: <a href="mailto:vedictechnoschool@gmail.com" class="text-blue-600 underline">vedictechnoschool@gmail.com</a></p>
+    <a href="https://maps.app.goo.gl/hGbqLsFnC3S2FfYLA" target="_blank" class="text-blue-600 underline fade-in">View on Google Maps</a>
+    <div class="social-links fade-in">
+        <a href="https://www.facebook.com/share/19yN3LsXX1/" target="_blank" class="flex items-center space-x-2">
+            <img src="https://cdn-icons-png.flaticon.com/512/124/124010.png" alt="Facebook" class="h-8 w-8">
+            <span>@vedictechnoschool</span>
+        </a>
+        <a href="https://www.instagram.com/vedictechnoschool" target="_blank" class="flex items-center space-x-2">
+            <img src="https://cdn-icons-png.flaticon.com/512/1384/1384063.png" alt="Instagram" class="h-8 w-8">
+            <span>@vedictechnoschool</span>
+        </a>
+        <a href="http://www.youtube.com/@VedicTechnoSchool" target="_blank" class="flex items-center space-x-2">
+            <img src="https://cdn-icons-png.flaticon.com/512/1384/1384060.png" alt="YouTube" class="h-8 w-8">
+            <span>@VedicTechnoSchool</span>
+        </a>
+    </div>
+</section>
+
+<section id="thankyou" class="py-16">
+    <div class="max-w-2xl mx-auto bg-white p-10 rounded-3xl shadow-2xl text-center">
+        <h2 class="text-4xl font-bold text-green-700 mb-4">Thank You! 🎉</h2>
+        <p class="text-lg text-gray-700 mb-6">Your enquiry has been received. We will get back to you within 24 hours.</p>
+        <a href="#home" class="inline-block bg-indigo-600 text-white px-8 py-3 rounded-full font-semibold hover:bg-indigo-500 transition">Back to Home</a>
+    </div>
+</section>
+
+<footer class="bg-indigo-900 text-white text-center py-6 fade-in">
+  <p>© 2026 Vedic Techno School. All Rights Reserved.</p>
+</footer>
+
+<div class="floating-btn">
+  <a href="https://wa.me/919861180727" target="_blank">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp Chat">
+  </a>
+</div>
+<div class="back-to-top" id="backToTopBtn" onclick="scrollToTop()">
+  <img src="https://cdn-icons-png.flaticon.com/512/130/130906.png" alt="Back to Top">
+</div>
+
+<script>
+  // ========== TYPING EFFECT ==========
+  const typingElement = document.getElementById('typingText');
+  const phrases = ['Quality Education', 'CBSE Pattern', 'Modern Facilities', 'Holistic Development', 'Admissions Open'];
+  let phraseIndex = 0;
+  let charIndex = 0;
+  let isDeleting = false;
+  function typeEffect() {
+    const currentPhrase = phrases[phraseIndex];
+    if (isDeleting) {
+      typingElement.textContent = currentPhrase.substring(0, charIndex - 1);
+      charIndex--;
+    } else {
+      typingElement.textContent = currentPhrase.substring(0, charIndex + 1);
+      charIndex++;
+    }
+    if (!isDeleting && charIndex === currentPhrase.length) {
+      isDeleting = true;
+      setTimeout(typeEffect, 1500);
+      return;
+    } else if (isDeleting && charIndex === 0) {
+      isDeleting = false;
+      phraseIndex = (phraseIndex + 1) % phrases.length;
+      setTimeout(typeEffect, 300);
+      return;
+    }
+    const speed = isDeleting ? 40 : 100;
+    setTimeout(typeEffect, speed);
+  }
+  typeEffect();
+
+  // ========== CHARACTER COUNTER ==========
+  const reviewTextarea = document.getElementById('reviewText');
+  const charCountDisplay = document.getElementById('charCount');
+  reviewTextarea.addEventListener('input', () => {
+    const len = reviewTextarea.value.length;
+    charCountDisplay.textContent = len + ' / 300 characters';
+  });
+
+  const navbar = document.getElementById("navbar");
+  const menuBtn = document.getElementById("menuBtn");
+  const navLinksMobile = document.getElementById("navLinksMobile");
+  const admissionBanner = document.getElementById("admissionBanner");
+  const body = document.body;
+
+  function closeBanner() {
+    admissionBanner.classList.add('hidden');
+    sessionStorage.setItem('bannerClosed', 'true');
+    updateNavbarPosition();
+  }
+  if (sessionStorage.getItem('bannerClosed') === 'true') {
+    admissionBanner.classList.add('hidden');
+  }
+
+  function updateNavbarPosition() {
+    const bannerHeight = admissionBanner.classList.contains('hidden') ? 0 : admissionBanner.offsetHeight;
+    navbar.style.top = bannerHeight + 'px';
+    document.body.style.paddingTop = bannerHeight + 'px';
+    document.documentElement.style.scrollPaddingTop = (bannerHeight + navbar.offsetHeight) + 'px';
+  }
+
+  window.addEventListener('load', updateNavbarPosition);
+  window.addEventListener('resize', updateNavbarPosition);
+
+  window.addEventListener("scroll", () => {
+    if(window.scrollY > 50){
+      navbar.classList.add("scrolled");
+      menuBtn.querySelectorAll('.bar').forEach(bar => bar.classList.add('bg-[#1e1b4b]'));
+    } else{
+      navbar.classList.remove("scrolled");
+      menuBtn.querySelectorAll('.bar').forEach(bar => bar.classList.remove('bg-[#1e1b4b]'));
+    }
+  });
+
+  menuBtn.addEventListener("click", () => {
+    navLinksMobile.classList.toggle("open");
+    menuBtn.classList.toggle("open");
+  });
+
+  navLinksMobile.querySelectorAll("a").forEach(link => {
+    link.addEventListener("click", () => {
+      navLinksMobile.classList.remove("open");
+      menuBtn.classList.remove("open");
+    });
+  });
+
+  document.addEventListener('click', function(event) {
+    const isClickInsideMenu = navLinksMobile.contains(event.target);
+    const isClickOnMenuBtn = menuBtn.contains(event.target);
+    if (!isClickInsideMenu && !isClickOnMenuBtn && navLinksMobile.classList.contains('open')) {
+      navLinksMobile.classList.remove('open');
+      menuBtn.classList.remove('open');
+    }
+  });
+
+  // Active nav spy
+  const sections = document.querySelectorAll('section[id]');
+  const navLinksAll = document.querySelectorAll('.nav-link');
+  window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(section => {
+      const sectionTop = section.offsetTop - (navbar.offsetHeight + (admissionBanner.classList.contains('hidden') ? 0 : admissionBanner.offsetHeight) + 20);
+      if (window.pageYOffset >= sectionTop) {
+        current = section.getAttribute('id');
+      }
+    });
+    navLinksAll.forEach(link => {
+      link.classList.remove('active');
+      if (link.getAttribute('href') === '#' + current) link.classList.add('active');
+    });
+    document.querySelectorAll('#navLinksMobile a').forEach(link => {
+      link.classList.remove('active');
+      if (link.getAttribute('href') === '#' + current) link.classList.add('active');
+    });
+  });
+
+  const backToTopBtn = document.getElementById('backToTopBtn');
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 100) backToTopBtn.classList.add('show');
+    else backToTopBtn.classList.remove('show');
+  });
+  function scrollToTop(){ window.scrollTo({top:0, behavior:'smooth'}); }
+
+  // Gallery slider with pause
+  let slideIndex = 0;
+  const gallerySlides = document.getElementsByClassName("gallery-slide");
+  const galleryDots = document.querySelector(".dots-container").getElementsByClassName("dot");
+  const prev = document.querySelector(".prev");
+  const next = document.querySelector(".next");
+  const galleryContainer = document.getElementById('galleryContainer');
+  let galleryInterval;
+
+  function showSlides(n) {
+    if (n >= gallerySlides.length) slideIndex = 0;
+    if (n < 0) slideIndex = gallerySlides.length - 1;
+    for (let i = 0; i < gallerySlides.length; i++) gallerySlides[i].classList.remove("active");
+    gallerySlides[slideIndex].classList.add("active");
+    const dotIndex = Math.floor(slideIndex / 3);
+    for (let i = 0; i < galleryDots.length; i++) galleryDots[i].classList.remove("active");
+    if (galleryDots[dotIndex]) galleryDots[dotIndex].classList.add("active");
+  }
+
+  function startGalleryAuto() {
+    stopGalleryAuto();
+    galleryInterval = setInterval(() => { slideIndex++; showSlides(slideIndex); }, 3000);
+  }
+  function stopGalleryAuto() { if (galleryInterval) clearInterval(galleryInterval); }
+
+  prev.addEventListener("click", () => { slideIndex--; showSlides(slideIndex); });
+  next.addEventListener("click", () => { slideIndex++; showSlides(slideIndex); });
+  for (let i = 0; i < galleryDots.length; i++) {
+    galleryDots[i].addEventListener("click", () => { slideIndex = i*5; showSlides(slideIndex); });
+  }
+  galleryContainer.addEventListener('mouseenter', stopGalleryAuto);
+  galleryContainer.addEventListener('mouseleave', startGalleryAuto);
+  galleryContainer.addEventListener('touchstart', stopGalleryAuto, {passive: true});
+  galleryContainer.addEventListener('touchend', () => setTimeout(startGalleryAuto, 2000));
+  startGalleryAuto();
+  showSlides(slideIndex);
+
+  // Review slider with pause
+  let reviewIndex = 0;
+  let reviewSlides = [];
+  let reviewDots = [];
+  let reviewAutoSlideInterval;
+  const reviewContainer = document.getElementById("reviewsList");
+  const reviewDotsContainer = document.querySelector(".review-dots");
+  const prevReview = document.querySelector(".review-prev");
+  const nextReview = document.querySelector(".review-next");
+  const reviewsSliderContainer = document.getElementById('reviewsSliderContainer');
+
+  function showReviewSlide(n) {
+    if (!reviewSlides.length) return;
+    if (n >= reviewSlides.length) reviewIndex = 0;
+    if (n < 0) reviewIndex = reviewSlides.length - 1;
+    reviewSlides.forEach(s => s.classList.remove("active"));
+    reviewDots.forEach(d => d.classList.remove("active"));
+    reviewSlides[reviewIndex].classList.add("active");
+    reviewDots[reviewIndex].classList.add("active");
+  }
+
+  function startReviewAuto() {
+    stopReviewAuto();
+    reviewAutoSlideInterval = setInterval(() => { reviewIndex++; showReviewSlide(reviewIndex); }, 7000);
+  }
+  function stopReviewAuto() { if (reviewAutoSlideInterval) clearInterval(reviewAutoSlideInterval); }
+
+  window.renderReviews = function(data) {
+    reviewContainer.innerHTML = "";
+    reviewDotsContainer.innerHTML = "";
+    stopReviewAuto();
+    reviewSlides = [];
+    reviewDots = [];
+    if (data.length === 0) {
+        reviewContainer.innerHTML = `<p class="text-gray-500 text-center py-8">Be the first to leave a review!</p>`;
+        prevReview.style.display = 'none';
+        nextReview.style.display = 'none';
+        return;
+    }
+    prevReview.style.display = 'block';
+    nextReview.style.display = 'block';
+    data.forEach((r, i) => {
+      const slide = document.createElement("div");
+      slide.className = "review-slide bg-white p-6 rounded-lg shadow-md relative";
+      const createdAt = r.createdAt ? r.createdAt.toDate() : new Date();
+      const timestampStr = createdAt.toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+      slide.innerHTML = `
+        <div class="flex items-center">
+            <p class="font-semibold text-indigo-900 text-lg">${r.name}</p>
+            <div class="ml-3 stars text-yellow-500" role="img" aria-label="${r.rating} out of 5 stars">
+                ${"★".repeat(r.rating)}<span class="text-gray-300">${"☆".repeat(5 - r.rating)}</span>
+            </div>
+        </div>
+        <p class="text-gray-700 mt-3 text-left italic">"${r.review}"</p>
+        <p class="text-gray-400 text-sm absolute bottom-2 right-3">${timestampStr}</p>
+      `;
+      reviewContainer.appendChild(slide);
+      reviewSlides.push(slide);
+      const dot = document.createElement("span");
+      dot.className = "dot";
+      dot.addEventListener("click", () => { reviewIndex = i; showReviewSlide(reviewIndex); });
+      reviewDotsContainer.appendChild(dot);
+      reviewDots.push(dot);
+    });
+    reviewIndex = 0;
+    showReviewSlide(reviewIndex);
+    startReviewAuto();
+  }
+
+  prevReview.addEventListener("click", () => { reviewIndex--; showReviewSlide(reviewIndex); });
+  nextReview.addEventListener("click", () => { reviewIndex++; showReviewSlide(reviewIndex); });
+  reviewsSliderContainer.addEventListener('mouseenter', stopReviewAuto);
+  reviewsSliderContainer.addEventListener('mouseleave', startReviewAuto);
+  reviewsSliderContainer.addEventListener('touchstart', stopReviewAuto, {passive: true});
+  reviewsSliderContainer.addEventListener('touchend', () => setTimeout(startReviewAuto, 2000));
+
+  // Enquiry form submission
+  const enquiryForm = document.getElementById('enquiryForm');
+  const enquiryStatus = document.getElementById('enquiryStatus');
+  const enquirySubmitBtn = document.getElementById('enquirySubmitBtn');
+  enquiryForm.addEventListener('submit', function(e) {
+    e.preventDefault();
+    const classSelect = enquiryForm.querySelector('select[name="class"]');
+    if (classSelect.value === '') {
+      classSelect.classList.add('border-red-500');
+      return;
+    } else {
+      classSelect.classList.remove('border-red-500');
+    }
+    const formData = new FormData(enquiryForm);
+    const originalBtnText = enquirySubmitBtn.innerHTML;
+    enquirySubmitBtn.disabled = true;
+    enquirySubmitBtn.innerHTML = 'Sending...';
+    fetch(enquiryForm.action, {
+        method: 'POST',
+        body: formData,
+        headers: { 'Accept': 'application/json' }
+    }).then(response => {
+        if (response.ok) {
+            enquiryStatus.style.display = 'block';
+            enquiryStatus.innerHTML = "Thank you for your enquiry! We will get back to you soon.";
+            enquiryStatus.className = "mt-3 p-3 rounded-lg bg-green-100 text-green-800";
+            enquiryForm.reset();
+            setTimeout(() => { enquiryStatus.style.display = 'none'; }, 5000);
+        } else {
+            response.json().then(data => {
+                if (Object.hasOwn(data, 'errors')) {
+                    enquiryStatus.innerHTML = data["errors"].map(error => error["message"]).join(", ");
+                } else {
+                    enquiryStatus.innerHTML = "Oops! There was a problem submitting your form.";
+                }
+                enquiryStatus.className = "mt-3 p-3 rounded-lg bg-red-100 text-red-800";
+            })
+        }
+    }).catch(error => {
+        enquiryStatus.innerHTML = "Oops! A network error occurred. Please try again.";
+        enquiryStatus.className = "mt-3 p-3 rounded-lg bg-red-100 text-red-800";
+    }).finally(() => {
+        enquirySubmitBtn.disabled = false;
+        enquirySubmitBtn.innerHTML = originalBtnText;
+    });
+  });
+</script>
+</body>
+</html>
