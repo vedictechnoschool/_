@@ -79,7 +79,6 @@
         name, rating, review, createdAt: serverTimestamp()
       });
       reviewForm.reset();
-      // Update character counter back to 0
       document.getElementById('charCount').textContent = '0 / 300 characters';
       const successMsg = document.getElementById('reviewSuccessMsg');
       if (successMsg) {
@@ -740,6 +739,7 @@
     resize: vertical;
   }
 
+  /* Review slider container: fixed height on mobile to prevent jumps */
   #reviewsList {
     min-height: 240px;
     overflow: hidden;
@@ -817,7 +817,6 @@
     transition: opacity 0.3s ease;
   }
 
-  /* Character counter */
   #charCount {
     font-size: 0.85rem;
     color: #6b7280;
@@ -1016,6 +1015,14 @@
       min-height: 100px;
       max-height: 160px;
     }
+    /* Fixed height for review slider on mobile */
+    #reviewsList {
+      height: 260px;
+      overflow-y: auto;
+    }
+    .review-slide {
+      min-height: auto;
+    }
   }
 </style>
 </head>
@@ -1072,7 +1079,6 @@
   <div class="relative z-10 max-w-3xl px-4">
     <img src="logo.jpeg" alt="Vedic Techno School Logo" class="hero-logo mx-auto rounded-full fade-in">
     <h1 class="text-3xl md:text-4xl sm:text-3xl font-extrabold mb-4 text-yellow-300 fade-in">Welcome to Vedic Techno School</h1>
-    <!-- Typing effect -->
     <div class="typing-container mb-4">
       <span class="typing-text" id="typingText"></span>
     </div>
@@ -1241,7 +1247,7 @@ Smt. Subhashree Panda
         <option value="2">⭐⭐ (Fair)</option>
         <option value="1">⭐ (Poor)</option>
       </select>
-      <textarea id="reviewText" placeholder="Your Review" class="w-full border p-3 rounded-lg" rows="4" required maxlength="300"></textarea>
+      <textarea id="reviewText" placeholder="Your Review (max 300 characters)" class="w-full border p-3 rounded-lg" rows="4" required maxlength="300"></textarea>
       <div id="charCount" class="text-right text-sm text-gray-500 mt-1">0 / 300 characters</div>
       <button type="submit" class="bg-indigo-500 text-white px-6 py-3 rounded-full font-semibold hover:bg-indigo-400 transition">Submit Review</button>
       <div id="reviewSuccessMsg" class="hidden bg-green-100 text-green-800 p-3 rounded-lg review-success-msg mt-3">✅ Thank you for your review! It will appear shortly.</div>
@@ -1463,7 +1469,7 @@ Smt. Subhashree Panda
   });
   function scrollToTop(){ window.scrollTo({top:0, behavior:'smooth'}); }
 
-  // Gallery slider with pause
+  // ========== GALLERY SLIDER (swipe + hold) ==========
   let slideIndex = 0;
   const gallerySlides = document.getElementsByClassName("gallery-slide");
   const galleryDots = document.querySelector(".dots-container").getElementsByClassName("dot");
@@ -1493,14 +1499,37 @@ Smt. Subhashree Panda
   for (let i = 0; i < galleryDots.length; i++) {
     galleryDots[i].addEventListener("click", () => { slideIndex = i*5; showSlides(slideIndex); });
   }
+
+  // Combined swipe + hold: single pair of touch listeners
+  let galleryStartX = 0;
+  galleryContainer.addEventListener('touchstart', (e) => {
+    galleryStartX = e.touches[0].clientX;
+    stopGalleryAuto(); // hold to pause
+  }, {passive: true});
+
+  galleryContainer.addEventListener('touchend', (e) => {
+    const endX = e.changedTouches[0].clientX;
+    const diff = galleryStartX - endX;
+    if (Math.abs(diff) > 50) {
+      // swipe detected
+      if (diff > 0) slideIndex++;
+      else slideIndex--;
+      showSlides(slideIndex);
+    }
+    // always restart auto after a short delay (unless mouse is still hovering)
+    setTimeout(() => {
+      if (!galleryContainer.matches(':hover')) startGalleryAuto();
+    }, 2000);
+  });
+
+  // Mouse hover pause (desktop)
   galleryContainer.addEventListener('mouseenter', stopGalleryAuto);
   galleryContainer.addEventListener('mouseleave', startGalleryAuto);
-  galleryContainer.addEventListener('touchstart', stopGalleryAuto, {passive: true});
-  galleryContainer.addEventListener('touchend', () => setTimeout(startGalleryAuto, 2000));
+
   startGalleryAuto();
   showSlides(slideIndex);
 
-  // Review slider with pause
+  // ========== REVIEW SLIDER (swipe + hold) ==========
   let reviewIndex = 0;
   let reviewSlides = [];
   let reviewDots = [];
@@ -1571,12 +1600,32 @@ Smt. Subhashree Panda
 
   prevReview.addEventListener("click", () => { reviewIndex--; showReviewSlide(reviewIndex); });
   nextReview.addEventListener("click", () => { reviewIndex++; showReviewSlide(reviewIndex); });
+
+  // Combined swipe + hold for reviews
+  let reviewStartX = 0;
+  reviewContainer.addEventListener('touchstart', (e) => {
+    reviewStartX = e.touches[0].clientX;
+    stopReviewAuto();
+  }, {passive: true});
+
+  reviewContainer.addEventListener('touchend', (e) => {
+    const endX = e.changedTouches[0].clientX;
+    const diff = reviewStartX - endX;
+    if (Math.abs(diff) > 50) {
+      if (diff > 0) reviewIndex++;
+      else reviewIndex--;
+      showReviewSlide(reviewIndex);
+    }
+    setTimeout(() => {
+      if (!reviewsSliderContainer.matches(':hover')) startReviewAuto();
+    }, 2000);
+  });
+
+  // Mouse hover pause
   reviewsSliderContainer.addEventListener('mouseenter', stopReviewAuto);
   reviewsSliderContainer.addEventListener('mouseleave', startReviewAuto);
-  reviewsSliderContainer.addEventListener('touchstart', stopReviewAuto, {passive: true});
-  reviewsSliderContainer.addEventListener('touchend', () => setTimeout(startReviewAuto, 2000));
 
-  // Enquiry form submission
+  // ========== ENQUIRY FORM ==========
   const enquiryForm = document.getElementById('enquiryForm');
   const enquiryStatus = document.getElementById('enquiryStatus');
   const enquirySubmitBtn = document.getElementById('enquirySubmitBtn');
